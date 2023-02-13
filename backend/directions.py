@@ -1,6 +1,6 @@
 import aiohttp
 import asyncio
-from constants import *
+from backend.constants import *
 
 
 google_maps_direction = "https://maps.googleapis.com/maps/api/directions/json?origin={}&destination={}&key={}&mode={}&departure_time={}"
@@ -8,24 +8,39 @@ google_maps_direction = "https://maps.googleapis.com/maps/api/directions/json?or
 
 async def get_directions(session, item):
 
-    print(item)
-    direction_driving = google_maps_direction.format(item[0], item[1], api_key, mode_drive, 1678224600)
-    direction_transit = google_maps_direction.format(item[0], item[1], api_key, mode_transit, 1678224600)
+    direction_driving = google_maps_direction.format(
+        item[1], item[2], api_key, mode_drive, 1678224600
+    )
+    direction_transit = google_maps_direction.format(
+        item[1], item[2], api_key, mode_transit, 1678224600
+    )
     async with session.get(direction_driving) as resp:
         driving = await resp.json()
-        by_car = driving["routes"][0]["legs"][0]["duration"]["value"]
     async with session.get(direction_transit) as resp:
         transit = await resp.json()
-        by_transit = transit["routes"][0]["legs"][0]["duration"]["value"]
 
-    return {"home": item[0],
-            "target": item[1],
-            "duration": {
-                "driving" : by_car,
-            "transit": by_transit,
-            "optimum_method" : "driving" if int(by_car) < by_transit else "transit",
-            "min_duration" : min(by_car, by_transit),
-            }
+    duration_car = (
+        int(driving["routes"][0]["legs"][0]["duration"]["value"])
+        if driving["status"] == "OK"
+        else float("+inf")
+    )
+    duration_transit = (
+        int(transit["routes"][0]["legs"][0]["duration"]["value"])
+        if transit["status"] == "OK"
+        else float("+inf")
+    )
+    best_mode = "driving" if duration_car < duration_transit else "transit"
+    distance = int(driving["routes"][0]["legs"][0]["distance"]["value"])
+
+    return {
+        "trip_id": str(item[0]) + " : " + str(round(distance / 1000, 1)),
+        "home": item[1],
+        "target": item[2],
+        "distance": distance,
+        "driving": duration_car,
+        "transit": duration_transit,
+        "best_mode": best_mode,
+        "min_duration": min(duration_car, duration_transit),
     }
 
 

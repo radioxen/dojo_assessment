@@ -1,15 +1,37 @@
-import io
 import matplotlib
-matplotlib.use('AGG')
-import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+
+matplotlib.use("AGG")
 
 
 def create_img(df):
-    plt.rcParams['figure.figsize'] = [7.50, 3.50]
-    plt.rcParams['figure.autolayout'] = True
-    fig = plt.figure()  # make sure to call this, in order to create a new figure
-    plt.plot([1, 2])
-    img_buf = io.BytesIO()
-    plt.savefig(img_buf, format='png')
-    plt.close(fig)
-    return img_buf
+
+    tidy = pd.merge(
+        left=df.melt(
+        id_vars="trip_id", value_vars=["driving", "transit"], value_name="duration"
+        ).rename(columns={"variable": "mode"}),
+        right=df,
+        how="inner",
+        on="trip_id",
+    ).sort_values(by=["distance"])
+    sns.set_theme(style="whitegrid")
+
+    plot = sns.catplot(
+        data=tidy,
+        kind="bar",
+        x="trip_id",
+        y="duration",
+        hue="mode",
+        color=2,
+        palette="dark6",
+        alpha=0.7,
+        height=7,
+        aspect=1.7,
+    )
+
+    plot.despine(left=True)
+    plot.set_axis_labels("Distance in meters", "duration in seconds")
+    plot.legend.set_title("")
+
+    return plot
