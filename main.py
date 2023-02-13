@@ -30,12 +30,12 @@ app.add_middleware(
 @app.get("/")
 async def main():
     content = """
-<body>
-<form action="/chart" enctype="multipart/form-data" method="post">
-<input name="file" type="file" single>
-<input type="submit">
-</body>
-    """
+        <body>
+        <form action="/chart" enctype="multipart/form-data" method="post">
+        <input name="file" type="file" single>
+        <input type="submit">
+        </body>
+        """
     return HTMLResponse(content=content)
 
 
