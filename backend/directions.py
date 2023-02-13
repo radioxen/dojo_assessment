@@ -37,8 +37,8 @@ async def get_directions(session, item):
         "home": item[1],
         "target": item[2],
         "distance": distance,
-        "driving": duration_car,
-        "transit": duration_transit,
+        "driving": (duration_car//60) + round((duration_car % 60)/60),
+        "transit": (duration_transit//60) + round((duration_transit % 60)/60),
         "best_mode": best_mode,
         "min_duration": min(duration_car, duration_transit),
     }

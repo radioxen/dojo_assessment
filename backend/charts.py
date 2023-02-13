@@ -31,7 +31,7 @@ def create_img(df):
     )
 
     plot.despine(left=True)
-    plot.set_axis_labels("Distance in meters", "duration in seconds")
+    plot.set_axis_labels("Distance in meters", "duration in minutes")
     plot.legend.set_title("")
 
     return plot

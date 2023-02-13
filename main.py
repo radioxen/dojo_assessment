@@ -31,7 +31,6 @@ async def get_chart(file: UploadFile):
     contents = file.file.read()
     buffer = BytesIO(contents)
     df = pd.read_csv(buffer)
-    df.sort_values()
     buffer.close()
     file.file.close()
     df.reset_index(inplace=True)
