@@ -1,4 +1,5 @@
-from fastapi import FastAPI, BackgroundTasks, Response, File, UploadFile
+from fastapi import FastAPI, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse, HTMLResponse
 import pandas as pd
 from io import BytesIO
@@ -12,6 +13,19 @@ templates = Jinja2Templates(directory="templates")
 
 app = FastAPI()
 
+
+origins = [
+    "http://localhost:3000",
+    "localhost:3000"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 @app.get("/")
 async def main():
