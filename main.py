@@ -29,6 +29,13 @@ app.add_middleware(
 
 @app.get("/")
 async def main():
+    """
+    receives an input csv file, containing home and target address:
+        - 2 columns, headers are mendatory, first column is home address and second column should be the target.
+        - there is no restriction for both addresses as long as they are valid.
+        - overseas travel is not implemented.
+    :return: a chart, illustrating travel time of driving versus public transit for all trips.
+    """
     content = """
         <body>
         <form action="/chart" enctype="multipart/form-data" method="post">
@@ -41,7 +48,11 @@ async def main():
 
 @app.post("/chart")
 async def get_chart(file: UploadFile):
+    """
 
+    :param file: csv file for iinpu with the iinstructed format : headers, 2 columns with 1st home and 2nd target addresses,
+    :return: a bar plot with units and legend, demonstrating travel time for 2 modes of transit.
+    """
     contents = file.file.read()
     buffer = BytesIO(contents)
     df = pd.read_csv(buffer)
