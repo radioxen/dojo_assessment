@@ -5,10 +5,6 @@ import pandas as pd
 from io import BytesIO
 from backend.directions import direction_main
 from backend.charts import create_img
-from fastapi.templating import Jinja2Templates
-
-
-templates = Jinja2Templates(directory="templates")
 
 
 app = FastAPI()
