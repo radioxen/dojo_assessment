@@ -33,7 +33,7 @@ async def get_directions(session, item):
     distance = int(driving["routes"][0]["legs"][0]["distance"]["value"])
 
     return {
-        "trip_id": str(item[0]) + " : " + str(round(distance / 1000, 1)),
+        "trip_id": "trip_" + str(item[0]+1) + " : " + str(round(distance / 1000, 1)),
         "home": item[1],
         "target": item[2],
         "distance": distance,
