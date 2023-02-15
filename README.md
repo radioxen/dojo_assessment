@@ -5,10 +5,12 @@ simple Fastapi web app to receive a csv file with home and target addresses and 
 It will return a chart with comparison of the mthods and time for each, along with distance of travel.
 
 steps : 
+  - open up a terminal tab and run the following commands in order
   - git clone https://github.com/radioxen/dojo_assessment.git
   - pip install virtualenv
-  - virtualenv your_venv --python=python3.8
-  - source your_venv/bin/activate
+  - cd dojo_assessment
+  - virtualenv venv --python=python3.8
+  - source venv/bin/activate
   - pip install -r requirment.txt
   - uvicorn main:app --reload --port 8000 
   - navigate to the ip address provided in your terminal (by default it is http://127.0.0.1:8000/) and use the form to upload your csv
